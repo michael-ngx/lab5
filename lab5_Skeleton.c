@@ -125,6 +125,8 @@ int main (void)
             safegets(phonenum, MAX_LENGTH);
             Node* newnode = newNode(fname,lname,address,phonenum);
 
+            printList(book);
+
             insertNode(book,newnode);
 
         }
@@ -352,5 +354,3 @@ void printList(LinkedList* book){
         on = on->next;
     }
 }
-
-
