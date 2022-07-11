@@ -112,20 +112,18 @@ int main (void)
             //   ADD STATEMENT(S) HERE
             
             printf("  family name: ");
-            char lname[MAX_LENGTH + 1];
+            char* lname = (char*)malloc(MAX_LENGTH + 1);
             safegets(lname, MAX_LENGTH);
             printf("  first name: ");
-            char fname[MAX_LENGTH + 1];
+            char* fname = (char*)malloc(MAX_LENGTH + 1);
             safegets(fname, MAX_LENGTH);
             printf("  address: ");
-            char address[MAX_LENGTH + 1];
+            char* address = (char*)malloc(MAX_LENGTH + 1);
             safegets(address, MAX_LENGTH);
             printf("  phone number: ");
-            char phonenum[MAX_LENGTH + 1];
+            char* phonenum = (char*)malloc(MAX_LENGTH + 1);
             safegets(phonenum, MAX_LENGTH);
             Node* newnode = newNode(fname,lname,address,phonenum);
-
-            printList(book);
 
             insertNode(book,newnode);
 
@@ -285,35 +283,34 @@ Node* newNode(char* fname, char* lname, char* address, char* phonenum){
 
 void insertNode(LinkedList* book, Node* newnode){
 
-
     if (book->head == NULL){
         book->head = newnode;
-        //printf("%s hihi",book->head->lname);
     }
-    
     /*
-    else if (strcmp(node->lname,book->head->lname) < 0){
+    else if (strcmp(newnode->lname,book->head->lname) < 0){
         printf("You/'re here");
-        node->next = book->head;
+        newnode->next = book->head;
         book->head = node;
         printList(book);
     }
     else{
         Node* on = book->head;
-        while (on->next != NULL && strcmp(node->lname,on->next->lname) < 0){
-            node->next = on->next;
-            on->next = node;
+        while (on->next != NULL && strcmp(newnode->lname,on->next->lname) < 0){
+            newnode->next = on->next;
+            on->next = newnode;
             on = on->next;
             printf("hihi");
             printList(book);
         }
     }
     */
-   else{
-    newnode->next = book->head;
-    book->head = newnode;
-   }
-   printList(book);
+    else{
+        newnode->next = book->head;
+        book->head = newnode;
+    }
+    printList(book);
+    printf("\nHere is the head\n");
+    printNode(book->head);
 }
 
 void printNode(Node* on){
