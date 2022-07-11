@@ -282,33 +282,30 @@ Node* newNode(char* fname, char* lname, char* address, char* phonenum){
 }
 
 void insertNode(LinkedList* book, Node* newnode){
-
+    
     if (book->head == NULL){
         book->head = newnode;
     }
-    /*
+
     else if (strcmp(newnode->lname,book->head->lname) < 0){
-        printf("You/'re here");
-        newnode->next = book->head;
-        book->head = node;
-        printList(book);
-    }
-    else{
-        Node* on = book->head;
-        while (on->next != NULL && strcmp(newnode->lname,on->next->lname) < 0){
-            newnode->next = on->next;
-            on->next = newnode;
-            on = on->next;
-            printf("hihi");
-            printList(book);
-        }
-    }
-    */
-    else{
         newnode->next = book->head;
         book->head = newnode;
     }
-    printList(book);
+    
+    else{
+        Node* on = book->head;
+        
+        while ((strcmp(on->lname,newnode->lname) != 0) && on->next != NULL && strcmp(newnode->lname,on->next->lname) >= 0){
+            on = on->next;
+        }
+        if (strcmp(on->lname,newnode->lname) == 0){
+            familyNameDuplicate(on->lname);
+            return;
+        }
+        newnode->next = on->next;
+        on->next = newnode;
+    }
+    
     printf("\nHere is the head\n");
     printNode(book->head);
 }
@@ -320,7 +317,7 @@ void printNode(Node* on){
 bool checkFamilyName(char* familyname,LinkedList* book){
     Node* on = book->head;
     while (on != NULL){
-        if (strcmp(on->fname,familyname) == 0){
+        if (strcmp(on->lname,familyname) == 0){
             familyNameFound(familyname);
             printNode(on);
             return true;
