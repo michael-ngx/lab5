@@ -46,11 +46,12 @@ typedef struct llist{
 LinkedList* initlist();
 Node* newNode();
 void insertNode(LinkedList* book, Node* newnode);
+void deleteNode (char* lname,LinkedList* book);
 void checkPhoneNum(char* phonenum, LinkedList* book);
-bool checkFamilyName(char* familyname,LinkedList* book);
+void checkFamilyName(char* familyname,LinkedList* book);
 void printNode();
 void printList(LinkedList*book);
-
+void deleteBook(LinkedList* book);
 
 //**********************************************************************
 // Support Function Declarations
@@ -135,6 +136,8 @@ int main (void)
             printf("\nEnter family name for entry to delete: ");
 
             //   ADD STATEMENT(S) HERE
+            char* lname = (char*)malloc(MAX_LENGTH + 1);
+            deleteNode(lname,book);
 
         }
         else if (response == 'S')
@@ -146,7 +149,7 @@ int main (void)
             //   ADD STATEMENT(S) HERE
             char familyname[MAX_LENGTH + 1];
             safegets(familyname, MAX_LENGTH);  
-            bool check = checkFamilyName(familyname,book);
+            checkFamilyName(familyname,book);
 
         }
         else if (response == 'R')
@@ -165,7 +168,7 @@ int main (void)
         {
             // Print the phone book.
             //   ADD STATEMENT(S) HERE
-
+            printList(book);
         }
         else if (response == 'Q')
         {
@@ -180,12 +183,10 @@ int main (void)
 
     // Delete the whole phone book linked list.
     //   ADD STATEMENT(S) HERE
-
+    deleteBook(book);
     // Print the linked list to confirm deletion.
     //   ADD STATEMENT(S) HERE
-    //printList(book);
-
-
+    printList(book);
     return 0;
 }
 
@@ -305,27 +306,46 @@ void insertNode(LinkedList* book, Node* newnode){
         newnode->next = on->next;
         on->next = newnode;
     }
+}
+
+void deleteNode (char* lname,LinkedList* book){
+    if (book->head == NULL){
+        familyNameNotFound(lname);
+        return;
+    }
+    Node* on = book->head;
     
-    printf("\nHere is the head\n");
-    printNode(book->head);
+    while ((strcmp(on->lname,lname) != 0) && on->next != NULL && (strcmp(on->next->lname,lname) != 0)){
+        on = on->next;
+    }
+
+    if (strcmp(on->lname,lname) == 0){
+        Node* temp = on;
+        free(temp);
+        book->head = NULL;
+    }
+    else if (strcmp(on->next->lname,lname) == 0){
+        Node* temp = on->next;
+        on->next = on->next->next;
+        free(temp);
+        familyNameDeleted(lname);
+    }
+    else{
+        familyNameNotFound(lname);
+    }
 }
 
-void printNode(Node* on){
-    printf("\n%s\n%s\n%s\n%s\n",on->lname, on->fname, on->address, on->phone);
-}
-
-bool checkFamilyName(char* familyname,LinkedList* book){
+void checkFamilyName(char* familyname,LinkedList* book){
     Node* on = book->head;
     while (on != NULL){
         if (strcmp(on->lname,familyname) == 0){
             familyNameFound(familyname);
             printNode(on);
-            return true;
+            return;
         }
         on = on->next;
     }
     familyNameNotFound(familyname);
-    return false;
 }
 
 void checkPhoneNum(char* phonenum,LinkedList* book){
@@ -341,10 +361,29 @@ void checkPhoneNum(char* phonenum,LinkedList* book){
     phoneNumberNotFound(phonenum);
 }
 
+void printNode(Node* on){
+    printf("\n%s\n%s\n%s\n%s\n",on->lname, on->fname, on->address, on->phone);
+}
+
 void printList(LinkedList* book){
     Node* on = book->head;
     while (on != NULL){
         printNode(on);
         on = on->next;
     }
+    printf("\n");
+}
+
+void deleteBook(LinkedList* book){
+    Node* on = book->head;
+    while (on != NULL){
+        Node* temp = on;
+        free(temp->address);
+        free(temp->fname);
+        free(temp->lname);
+        free(temp->phone);
+        free(temp);
+        on = on->next;
+    }
+    free(book);
 }
