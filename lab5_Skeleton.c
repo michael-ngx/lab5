@@ -136,8 +136,9 @@ int main (void)
             printf("\nEnter family name for entry to delete: ");
 
             //   ADD STATEMENT(S) HERE
-            char* lname = (char*)malloc(MAX_LENGTH + 1);
-            deleteNode(lname,book);
+            char* input = (char*)malloc(MAX_LENGTH + 1);
+            safegets(input, MAX_LENGTH);
+            deleteNode(input,book);
 
         }
         else if (response == 'S')
@@ -314,15 +315,15 @@ void deleteNode (char* lname,LinkedList* book){
         return;
     }
     Node* on = book->head;
-    
-    while ((strcmp(on->lname,lname) != 0) && on->next != NULL && (strcmp(on->next->lname,lname) != 0)){
+    while ((strcmp(on->lname,lname) != 0) && (on->next != NULL) && (strcmp(on->next->lname,lname) != 0)){
+        printf("Entered the while loop\n");
         on = on->next;
     }
 
     if (strcmp(on->lname,lname) == 0){
-        Node* temp = on;
-        free(temp);
-        book->head = NULL;
+        book->head = on->next;
+        free(on);
+        printf("Deleted first node");
     }
     else if (strcmp(on->next->lname,lname) == 0){
         Node* temp = on->next;
@@ -330,9 +331,13 @@ void deleteNode (char* lname,LinkedList* book){
         free(temp);
         familyNameDeleted(lname);
     }
-    else{
+    
+    ///Problem here. The code doesn't even reach this place!!!!!
+    else if (on->next == NULL){
+        printf("the code got here");
         familyNameNotFound(lname);
     }
+    return;
 }
 
 void checkFamilyName(char* familyname,LinkedList* book){
@@ -378,12 +383,12 @@ void deleteBook(LinkedList* book){
     Node* on = book->head;
     while (on != NULL){
         Node* temp = on;
+        on = on->next;
         free(temp->address);
         free(temp->fname);
         free(temp->lname);
         free(temp->phone);
         free(temp);
-        on = on->next;
     }
     free(book);
 }
