@@ -1,7 +1,7 @@
  A program that maintains a personal phone book. The program allows to: 
  
-▪ Add and Delete entries from the phone book, 
-▪ Search the phone book for a specific entry by last name or by phone number, and 
+▪ Add and Delete entries from the phone book,
+▪ Search the phone book for a specific entry by last name or by phone number, and
 ▪ Print out the entire entries in the phone book. 
 
 The data in the phone book is maintained by storing in memory with the use of a singly linked list, with 
