@@ -20,8 +20,6 @@
 // Linked List Definitions
 //  Define your linked list node and pointer types
 //  here for use throughout the file.
-//
-//   ADD STATEMENT(S) HERE
 
 typedef struct node
 {
@@ -42,8 +40,6 @@ typedef struct llist
 //
 // Functions that modify the linked list.
 //   Declare your linked list functions here.
-//
-//   ADD STATEMENT(S) HERE
 
 LinkedList *initlist();
 Node *newNode();
@@ -57,7 +53,6 @@ void deleteBook(LinkedList *book, Node *temp);
 
 //**********************************************************************
 // Support Function Declarations
-//
 
 void safegets(char s[], int arraySize);      // gets without buffer overflow
 void familyNameDuplicate(char familyName[]); // marker/tester friendly
@@ -174,12 +169,13 @@ int main(void)
     }
 exit:
 
+    printf("Loop exited!\nBook as %d items!", book->numNode);
+
     // Delete the whole phone book linked list.
     deleteBook(book, book->head);
-    // free(book);
-    // printList(book);
     // Print the linked list to confirm deletion.
     printList(book);
+    free(book);
     return 0;
 }
 
@@ -280,8 +276,7 @@ Node *newNode(char *fname, char *lname, char *address, char *phonenum)
 
 void insertNode(LinkedList *book, Node *newnode)
 {
-
-    if (book->head == NULL)
+    if (book->numNode == 0)
     {
         book->head = newnode;
     }
@@ -312,14 +307,18 @@ void insertNode(LinkedList *book, Node *newnode)
 
 void deleteNode(char *lname, LinkedList *book)
 {
+    if (book->numNode == 0)
+    {
+        printPhoneBookEmpty();
+        return;
+    }
+
     if (book->head == NULL)
     {
         familyNameNotFound(lname);
         return;
     }
-
     Node *on = book->head;
-
     while ((strcmp(on->lname, lname) != 0) && (on->next != NULL) && (strcmp(on->next->lname, lname) != 0))
     {
         on = on->next;
@@ -331,10 +330,12 @@ void deleteNode(char *lname, LinkedList *book)
         free(on);
         printf("Deleted first node");
     }
+
     else if (on->next == NULL)
     {
         familyNameNotFound(lname);
     }
+
     else
     {
         Node *temp = on->next;
@@ -342,6 +343,7 @@ void deleteNode(char *lname, LinkedList *book)
         free(temp);
         familyNameDeleted(lname);
     }
+    book->numNode--;
 }
 
 void checkFamilyName(char *familyname, LinkedList *book)
@@ -397,22 +399,10 @@ void printList(LinkedList *book)
     printf("\n");
 }
 
-// void deleteBook(LinkedList* book){
-//     Node* on = book->head;
-//     while (on != NULL){
-//         Node* temp = on;
-//         on = on->next;
-//         free(temp->address);
-//         free(temp->fname);
-//         free(temp->lname);
-//         free(temp->phone);
-//         free(temp);
-//     }
-//     free(book);
-// }
-
 void deleteBook(LinkedList *book, Node *current)
 {
+    if(book->numNode == 0)
+        return;
     if (current->next != NULL)
         deleteBook(book, current->next);
 
@@ -421,5 +411,5 @@ void deleteBook(LinkedList *book, Node *current)
     free(current->phone);
     free(current->address);
     free(current);
+    book->numNode--;
 }
-
