@@ -332,8 +332,8 @@ void deleteNode (char* lname,LinkedList* book){
         familyNameDeleted(lname);
     }
     
-    ///Problem here. The code doesn't even reach this place!!!!!
-    else if (on->next == NULL){
+    //Problem here. The code doesn't even reach this place!!!!!
+    else{                                   //When lname could not be found, and on->next == NULL
         printf("the code got here");
         familyNameNotFound(lname);
     }
