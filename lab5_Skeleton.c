@@ -51,7 +51,7 @@ void checkPhoneNum(char* phonenum, LinkedList* book);
 void checkFamilyName(char* familyname,LinkedList* book);
 void printNode();
 void printList(LinkedList*book);
-void deleteBook(LinkedList* book);
+void deleteBook(LinkedList* book, Node*temp);
 
 //**********************************************************************
 // Support Function Declarations
@@ -96,97 +96,81 @@ int main (void)
     printf("%s",bannerString);
     printf("%s",commandList);
 
-    char response;
+    
     char input[MAX_LENGTH+1];
-    do
+    while(1) // while(true)
     {
         printf("\nCommand?: ");
         safegets(input,MAX_LENGTH+1);
         // Response is first char entered by user.
         // Convert to uppercase to simplify later comparisons.
-        response = toupper(input[0]);
+        char response = toupper(input[0]);
         
-        if (response == 'I')
+        switch (response)
         {
+        case 'I':
             // Insert an phone book entry into the linked list.
             // Maintain the list in alphabetical order by family name.
             //   ADD STATEMENT(S) HERE
-            
+
             printf("  family name: ");
-            char* lname = (char*)malloc(MAX_LENGTH + 1);
+            char *lname = (char *)malloc(MAX_LENGTH + 1);
             safegets(lname, MAX_LENGTH);
             printf("  first name: ");
-            char* fname = (char*)malloc(MAX_LENGTH + 1);
+            char *fname = (char *)malloc(MAX_LENGTH + 1);
             safegets(fname, MAX_LENGTH);
             printf("  address: ");
-            char* address = (char*)malloc(MAX_LENGTH + 1);
+            char *address = (char *)malloc(MAX_LENGTH + 1);
             safegets(address, MAX_LENGTH);
             printf("  phone number: ");
-            char* phonenum = (char*)malloc(MAX_LENGTH + 1);
+            char *phonenum = (char *)malloc(MAX_LENGTH + 1);
             safegets(phonenum, MAX_LENGTH);
-            Node* newnode = newNode(fname,lname,address,phonenum);
+            Node *newnode = newNode(fname, lname, address, phonenum);
 
-            insertNode(book,newnode);
-
-        }
-        else if (response == 'D')
-        {
-            // Delete an phone book entry from the list.
-
+            insertNode(book, newnode);
+            break;
+        case 'D':
+            // Delete an phone book entry from the list
             printf("\nEnter family name for entry to delete: ");
 
-            //   ADD STATEMENT(S) HERE
-            char* input = (char*)malloc(MAX_LENGTH + 1);
+            char *input = (char *)malloc(MAX_LENGTH + 1);
             safegets(input, MAX_LENGTH);
-            deleteNode(input,book);
-
-        }
-        else if (response == 'S')
-        {
+            deleteNode(input, book);
+            break;
+        case 'S':
             // Search for an phone book entry by family name.
-
             printf("\nEnter family name to search for: ");
 
-            //   ADD STATEMENT(S) HERE
             char familyname[MAX_LENGTH + 1];
-            safegets(familyname, MAX_LENGTH);  
-            checkFamilyName(familyname,book);
+            safegets(familyname, MAX_LENGTH);
+            checkFamilyName(familyname, book);
+            break;
 
-        }
-        else if (response == 'R')
-        {
+        case 'R':
             // Search for an phone book entry by phone number.
-
             printf("\nEnter phone number to search for: ");
-            
-            //   ADD STATEMENT(S) HERE
 
             char phonenum[MAX_LENGTH + 1];
             safegets(phonenum, MAX_LENGTH);
-            checkPhoneNum(phonenum,book);
-        }
-        else if (response == 'P')
-        {
+            checkPhoneNum(phonenum, book);
+            break;
+        case 'P':
             // Print the phone book.
             //   ADD STATEMENT(S) HERE
             printList(book);
-        }
-        else if (response == 'Q')
-        {
-            ; // do nothing, we'll catch this below
-        }
-        else
-        {
+            break;
+        default:
             // do this if no command matched ...
-            printf("\nInvalid command.\n%s\n",commandList);
+            printf("\nInvalid command.\n%s\n", commandList);
+            break;
         }
-    } while (response != 'Q');
+    }
 
     // Delete the whole phone book linked list.
-    //   ADD STATEMENT(S) HERE
-    deleteBook(book);
+    deleteBook(book, book->head);
+    //free(book);
+    
     // Print the linked list to confirm deletion.
-    //   ADD STATEMENT(S) HERE
     printList(book);
     return 0;
 }
@@ -275,9 +259,9 @@ LinkedList* initlist(){
 
 Node* newNode(char* fname, char* lname, char* address, char* phonenum){
     Node* node = (Node*)malloc(sizeof(Node));
-    node->address = address;
     node->fname = fname;
     node->lname = lname;
+    node->address = address;
     node->phone = phonenum;
     node->next = NULL;
     return node;
@@ -314,7 +298,9 @@ void deleteNode (char* lname,LinkedList* book){
         familyNameNotFound(lname);
         return;
     }
+
     Node* on = book->head;
+
     while ((strcmp(on->lname,lname) != 0) && (on->next != NULL) && (strcmp(on->next->lname,lname) != 0)){
         printf("Entered the while loop\n");
         on = on->next;
@@ -379,16 +365,28 @@ void printList(LinkedList* book){
     printf("\n");
 }
 
-void deleteBook(LinkedList* book){
-    Node* on = book->head;
-    while (on != NULL){
-        Node* temp = on;
-        on = on->next;
-        free(temp->address);
-        free(temp->fname);
-        free(temp->lname);
-        free(temp->phone);
-        free(temp);
-    }
-    free(book);
+// void deleteBook(LinkedList* book){
+//     Node* on = book->head;
+//     while (on != NULL){
+//         Node* temp = on;
+//         on = on->next;
+//         free(temp->address);
+//         free(temp->fname);
+//         free(temp->lname);
+//         free(temp->phone);
+//         free(temp);
+//     }
+//     free(book);
+// }
+
+void deleteBook(LinkedList* book, Node* temp){
+    if(temp->next!=NULL)
+        deleteBook(book, temp->next);
+
+    free(temp->fname);
+    free(temp->lname);
+    free(temp->phone);
+    free(temp->address);
+    free(temp);
+    
 }
