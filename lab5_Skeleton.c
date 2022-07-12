@@ -277,7 +277,7 @@ Node *newNode(char *fname, char *lname, char *address, char *phonenum)
 
 void insertNode(LinkedList *book, Node *newnode)
 {
-    if (book->numNode == 0)
+    if (book->head == NULL)
     {
         book->head = newnode;
     }
@@ -309,7 +309,7 @@ void insertNode(LinkedList *book, Node *newnode)
 
 void deleteNode(char *lname, LinkedList *book)
 {
-    if (book->numNode == 0)
+    if (book->head == NULL)
     {
         printPhoneBookEmpty();
         return;
@@ -345,7 +345,6 @@ void deleteNode(char *lname, LinkedList *book)
         free(temp);
         familyNameDeleted(lname);
     }
-    book->numNode--;
 }
 
 void checkFamilyName(char *familyname, LinkedList *book)
@@ -403,7 +402,7 @@ void printList(LinkedList *book)
 
 void deleteBook(LinkedList *book, Node *on)
 {
-    if(book->numNode == 0)
+    if(book->head == NULL)
         return;
     if (on->next != NULL)
         deleteBook(book, on->next);
