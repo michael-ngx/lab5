@@ -179,10 +179,17 @@ exit:
     
     // Delete the whole phone book linked list.
     deleteBook(book, book->head);
+<<<<<<< HEAD
     // Print the linked list to confirm deletion.
     printList(book);
 
     free(book);
+=======
+    // free(book);
+    // printList(book);
+    // Print the linked list to confirm deletion.
+
+>>>>>>> 601ce7ca8ad5925a27a9a1ab2be68b7f22a1e1c7
     return 0;
 }
 
@@ -344,7 +351,6 @@ void deleteNode(char *lname, LinkedList *book)
         free(temp);
         familyNameDeleted(lname);
     }
-
     /// Problem here. The code doesn't even reach this place!!!!!
     else if (on->next == NULL)
     {
@@ -433,5 +439,10 @@ void deleteBook(LinkedList *book, Node *current)
     free(current->phone);
     free(current->address);
     free(current);
+<<<<<<< HEAD
     book->numNode--;
 }
+=======
+}
+
+>>>>>>> 601ce7ca8ad5925a27a9a1ab2be68b7f22a1e1c7
