@@ -35,7 +35,6 @@ typedef struct node
 typedef struct llist
 {
     Node *head;
-    int numNode;
 } LinkedList;
 
 //**********************************************************************
@@ -175,14 +174,12 @@ int main(void)
     }
 exit:
 
-    printf("Loop exited!\nBook as %d items!\n", book->numNode);
-    printList(book);
     // Delete the whole phone book linked list.
     deleteBook(book, book->head);
     // free(book);
     // printList(book);
     // Print the linked list to confirm deletion.
-
+    printList(book);
     return 0;
 }
 
@@ -267,7 +264,6 @@ LinkedList *initlist()
 {
     LinkedList *list = (LinkedList *)malloc(sizeof(LinkedList));
     list->head = NULL;
-    list->numNode = 0;
     return list;
 }
 
@@ -285,7 +281,7 @@ Node *newNode(char *fname, char *lname, char *address, char *phonenum)
 void insertNode(LinkedList *book, Node *newnode)
 {
 
-    if (book->numNode == 0)
+    if (book->head == NULL)
     {
         book->head = newnode;
     }
@@ -312,7 +308,6 @@ void insertNode(LinkedList *book, Node *newnode)
         newnode->next = on->next;
         on->next = newnode;
     }
-    book->numNode++;
 }
 
 void deleteNode(char *lname, LinkedList *book)
@@ -327,7 +322,6 @@ void deleteNode(char *lname, LinkedList *book)
 
     while ((strcmp(on->lname, lname) != 0) && (on->next != NULL) && (strcmp(on->next->lname, lname) != 0))
     {
-        printf("Entered the while loop\n");
         on = on->next;
     }
 
@@ -337,20 +331,17 @@ void deleteNode(char *lname, LinkedList *book)
         free(on);
         printf("Deleted first node");
     }
-    else if (strcmp(on->next->lname, lname) == 0)
+    else if (on->next == NULL)
+    {
+        familyNameNotFound(lname);
+    }
+    else
     {
         Node *temp = on->next;
         on->next = on->next->next;
         free(temp);
         familyNameDeleted(lname);
     }
-    /// Problem here. The code doesn't even reach this place!!!!!
-    else if (on->next == NULL)
-    {
-        printf("the code got here");
-        familyNameNotFound(lname);
-    }
-    book->numNode--;
 }
 
 void checkFamilyName(char *familyname, LinkedList *book)
@@ -392,7 +383,7 @@ void printNode(Node *on)
 
 void printList(LinkedList *book)
 {
-    if (book->numNode <= 0)
+    if (book->head == NULL)
     {
         printPhoneBookEmpty();
         return;
