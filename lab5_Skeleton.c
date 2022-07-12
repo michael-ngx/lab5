@@ -181,8 +181,8 @@ exit:
     deleteBook(book, book->head);
     // free(book);
     // printList(book);
-
     // Print the linked list to confirm deletion.
+
     return 0;
 }
 
@@ -344,7 +344,6 @@ void deleteNode(char *lname, LinkedList *book)
         free(temp);
         familyNameDeleted(lname);
     }
-
     /// Problem here. The code doesn't even reach this place!!!!!
     else if (on->next == NULL)
     {
@@ -432,3 +431,4 @@ void deleteBook(LinkedList *book, Node *current)
     free(current->address);
     free(current);
 }
+
