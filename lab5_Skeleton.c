@@ -176,13 +176,13 @@ int main(void)
 exit:
 
     printf("Loop exited!\nBook as %d items!\n", book->numNode);
-    printList(book);
+    
     // Delete the whole phone book linked list.
     deleteBook(book, book->head);
-    // free(book);
-    // printList(book);
-
     // Print the linked list to confirm deletion.
+    printList(book);
+
+    free(book);
     return 0;
 }
 
@@ -423,6 +423,8 @@ void printList(LinkedList *book)
 
 void deleteBook(LinkedList *book, Node *current)
 {
+    if(book->numNode == 0)
+        return;
     if (current->next != NULL)
         deleteBook(book, current->next);
 
@@ -431,4 +433,5 @@ void deleteBook(LinkedList *book, Node *current)
     free(current->phone);
     free(current->address);
     free(current);
+    book->numNode--;
 }
