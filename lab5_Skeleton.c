@@ -33,7 +33,6 @@ typedef struct node
 typedef struct llist
 {
     Node *head;
-    int numNode;
 } LinkedList;
 
 //**********************************************************************
@@ -171,12 +170,11 @@ int main(void)
 exit:
 
     printf("Loop exited!\nBook as %d items!", book->numNode);
-    
+
     // Delete the whole phone book linked list.
     deleteBook(book, book->head);
     // Print the linked list to confirm deletion.
     printList(book);
-
     free(book);
     return 0;
 }
@@ -262,7 +260,6 @@ LinkedList *initlist()
 {
     LinkedList *list = (LinkedList *)malloc(sizeof(LinkedList));
     list->head = NULL;
-    list->numNode = 0;
     return list;
 }
 
@@ -306,7 +303,6 @@ void insertNode(LinkedList *book, Node *newnode)
         newnode->next = on->next;
         on->next = newnode;
     }
-    book->numNode++;
 }
 
 void deleteNode(char *lname, LinkedList *book)
@@ -389,7 +385,7 @@ void printNode(Node *on)
 
 void printList(LinkedList *book)
 {
-    if (book->numNode <= 0)
+    if (book->head == NULL)
     {
         printPhoneBookEmpty();
         return;
