@@ -144,7 +144,6 @@ int main (void)
         else if (response == 'S')
         {
             // Search for an phone book entry by family name.
-
             printf("\nEnter family name to search for: ");
 
             //   ADD STATEMENT(S) HERE
