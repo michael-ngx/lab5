@@ -185,9 +185,11 @@ int main (void)
     // Delete the whole phone book linked list.
     //   ADD STATEMENT(S) HERE
     deleteBook(book);
+    
     // Print the linked list to confirm deletion.
     //   ADD STATEMENT(S) HERE
     printList(book);
+    
     return 0;
 }
 
